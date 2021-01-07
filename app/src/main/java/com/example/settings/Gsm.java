@@ -138,13 +138,13 @@ public class Gsm {
                     {
                         CellSignalStrengthGsm cellSignalStrengthGsm = ((CellInfoGsm)cellInfo).getCellSignalStrength();
                         dbm = cellSignalStrengthGsm.getDbm();
-                        Log.e("66666", "cellSignalStrengthGsm" + cellSignalStrengthGsm.toString());
+                        Log.e("DEBUG", "cellSignalStrengthGsm" + cellSignalStrengthGsm.toString());
                     }
                     else if (cellInfo instanceof CellInfoCdma)
                     {
                         CellSignalStrengthCdma cellSignalStrengthCdma = ((CellInfoCdma)cellInfo).getCellSignalStrength();
                         dbm = cellSignalStrengthCdma.getDbm();
-                        Log.e("66666", "cellSignalStrengthCdma" + cellSignalStrengthCdma.toString() );
+                        Log.e("DEBUG", "cellSignalStrengthCdma" + cellSignalStrengthCdma.toString() );
                     }
                     else if (cellInfo instanceof CellInfoWcdma)
                     {
@@ -152,7 +152,7 @@ public class Gsm {
                         {
                             CellSignalStrengthWcdma cellSignalStrengthWcdma = ((CellInfoWcdma)cellInfo).getCellSignalStrength();
                             dbm = cellSignalStrengthWcdma.getDbm();
-                            Log.e("66666", "cellSignalStrengthWcdma" + cellSignalStrengthWcdma.toString() );
+                            Log.e("DEBUG", "cellSignalStrengthWcdma" + cellSignalStrengthWcdma.toString() );
                         }
                     }
                     else if (cellInfo instanceof CellInfoLte)
