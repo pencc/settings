@@ -44,195 +44,12 @@ public class MainActivity extends AppCompatActivity {
     private final String print_head = "------";
     private int signal_dbm = 0;
 
-    private String getIccId() {
-        TelephonyManager tm;
-        String iccid = null;
-        try {
-            tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                RequestPhoneStatePermission();
-            }
-            iccid = (String) tm.getSimSerialNumber();
-
-        } catch (Exception e) {
-            return e.getMessage();
-        }
-
-        return iccid;
-    }
-
-    private String getIMEI() {
-        String imei;
-        try {
-            //实例化TelephonyManager对象
-            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                RequestPhoneStatePermission();
-            }
-            //获取IMEI号
-            imei = telephonyManager.getDeviceId();
-        } catch (Exception e) {
-            return e.getMessage();
-        }
-        return imei;
-    }
-
-    private String getIMSI() {
-        String imsi;
-        try {
-            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                RequestPhoneStatePermission();
-            }
-            //获取IMSI号
-            imsi = telephonyManager.getSubscriberId();
-        } catch (Exception e) {
-            return e.getMessage();
-        }
-        return imsi;
-    }
-
-    public void RequestPhoneStatePermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            int permissionCheck = this.getApplicationContext().checkSelfPermission(Manifest.permission.READ_PHONE_STATE);
-            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 100);
-            }
-
-            permissionCheck = this.getApplicationContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
-            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
-            }
-        }
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         return;
     }
 
-    private String intToIp(int i) {
-        return ((i >> 24) & 0xFF) + "." +
-                ((i >> 16) & 0xFF) + "." +
-                ((i >> 8) & 0xFF) + "." +
-                (i & 0xFF);
-    }
-
-    // get wifi ip
-    private String getWlanIpAddress() {
-        WifiManager wifiManager;
-        String ip;
-        try {
-            wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-            int ipAddress = wifiInfo.getIpAddress();
-            ip = intToIp(ipAddress);
-        } catch (Exception e) {
-            ip = e.toString();
-        }
-
-        return ip;
-    }
-
-    // get wifi mac
-    public static String getWlanMacAddress(String name) {
-        try {
-            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface nif : all) {
-                if (!nif.getName().equalsIgnoreCase(name)) continue;
-
-                byte[] macBytes = nif.getHardwareAddress();
-                if (macBytes == null) {
-                    return "";
-                }
-
-                StringBuilder res1 = new StringBuilder();
-                for (byte b : macBytes) {
-                    res1.append(String.format("%02X:", b));
-                }
-
-                if (res1.length() > 0) {
-                    res1.deleteCharAt(res1.length() - 1);
-                }
-                return res1.toString();
-            }
-        } catch (Exception ex) {
-        }
-        return "02:00:00:00:00:00";
-    }
-
-    //GPRS连接下的ip
-    public String getLocalIpAddress() {
-        NetworkInfo info = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-        if (info != null && info.isConnected()) {
-            // 3/4g网络
-            if (info.getType() == ConnectivityManager.TYPE_MOBILE) {
-                try {
-                    for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
-                        NetworkInterface intf = en.nextElement();
-                        for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
-                            InetAddress inetAddress = enumIpAddr.nextElement();
-                            if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
-                                return inetAddress.getHostAddress();
-                            }
-                        }
-                    }
-                } catch (SocketException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }
-        return null;
-    }
-
-
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public int getMobileDbm() {
-        int dbm = 0;
-        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            RequestPhoneStatePermission();
-        }
-        List<CellInfo> cellInfoList = tm.getAllCellInfo();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-        {
-            if (null != cellInfoList)
-            {
-                for (CellInfo cellInfo : cellInfoList)
-                {
-                    if (cellInfo instanceof CellInfoGsm)
-                    {
-                        CellSignalStrengthGsm cellSignalStrengthGsm = ((CellInfoGsm)cellInfo).getCellSignalStrength();
-                        dbm = cellSignalStrengthGsm.getDbm();
-                        Log.e("66666", "cellSignalStrengthGsm" + cellSignalStrengthGsm.toString());
-                    }
-                    else if (cellInfo instanceof CellInfoCdma)
-                    {
-                        CellSignalStrengthCdma cellSignalStrengthCdma = ((CellInfoCdma)cellInfo).getCellSignalStrength();
-                        dbm = cellSignalStrengthCdma.getDbm();
-                        Log.e("66666", "cellSignalStrengthCdma" + cellSignalStrengthCdma.toString() );
-                    }
-                    else if (cellInfo instanceof CellInfoWcdma)
-                    {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)
-                        {
-                            CellSignalStrengthWcdma cellSignalStrengthWcdma = ((CellInfoWcdma)cellInfo).getCellSignalStrength();
-                            dbm = cellSignalStrengthWcdma.getDbm();
-                            Log.e("66666", "cellSignalStrengthWcdma" + cellSignalStrengthWcdma.toString() );
-                        }
-                    }
-                    else if (cellInfo instanceof CellInfoLte)
-                    {
-                        CellSignalStrengthLte cellSignalStrengthLte = ((CellInfoLte)cellInfo).getCellSignalStrength();
-                        dbm = cellSignalStrengthLte.getDbm();
-                    }
-                }
-            }
-        }
-        return dbm;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -267,17 +84,17 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(print_head + "产品名(prop)：" + gdev_name);
         }
 
-        System.out.println(print_head + "IP(WIFI)：" + getWlanIpAddress());
+        System.out.println(print_head + "IP(WIFI)：" + Wireless.getWlanIpAddress(this));
         // IPV6??
-        System.out.println(print_head + "MAC(wlan0)：" + getWlanMacAddress("wlan0"));
-        System.out.println(print_head + "MAC(wlan1)：" + getWlanMacAddress("wlan1"));
-        System.out.println(print_head + "IP(GPRS):" + getLocalIpAddress());
-        System.out.println(print_head + "MAC(phone1)：" + getWlanMacAddress("rmnet_data1"));
-        System.out.println(print_head + "MAC(phone2)：" + getWlanMacAddress("rmnet_data2"));
+        System.out.println(print_head + "MAC(wlan0)：" + Wireless.getWlanMacAddress("wlan0"));
+        System.out.println(print_head + "MAC(wlan1)：" + Wireless.getWlanMacAddress("wlan1"));
+        System.out.println(print_head + "IP(GPRS):" + Gsm.getLocalIpAddress(this));
+        System.out.println(print_head + "MAC(phone1)：" + Wireless.getWlanMacAddress("rmnet_data1"));
+        System.out.println(print_head + "MAC(phone2)：" + Wireless.getWlanMacAddress("rmnet_data2"));
 
-        System.out.println(print_head + "ICCID：" + getIccId());
-        System.out.println(print_head + "IMSI：" + getIMSI());
-        System.out.println(print_head + "IMEI：" + getIMEI());
-        System.out.println(print_head + "SignalDbm：" + getMobileDbm());
+        System.out.println(print_head + "ICCID：" + Gsm.getIccId(this));
+        System.out.println(print_head + "IMSI：" + Gsm.getIMSI(this));
+        System.out.println(print_head + "IMEI：" + Gsm.getIMEI(this));
+        System.out.println(print_head + "SignalDbm：" + Gsm.getMobileDbm(this));
     }
 }
