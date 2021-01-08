@@ -81,6 +81,21 @@ public class Gsm {
         return imsi;
     }
 
+    public static String getLine1Number(Context context) {
+        String imsi;
+        try {
+            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            //获取IMSI号
+            imsi = telephonyManager.getSubscriberId();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        return imsi;
+    }
+
     public static void RequestPhoneStatePermission(Context context) {
         if (Build.VERSION.SDK_INT >= 23) {
             int permissionCheck = context.getApplicationContext().checkSelfPermission(Manifest.permission.READ_PHONE_STATE);

@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(print_tag, print_head + "MAC(phone1)：" + Wireless.getWlanMacAddress("rmnet_data1"));
         Log.i(print_tag, print_head + "MAC(phone2)：" + Wireless.getWlanMacAddress("rmnet_data2"));
 
-        Log.i(print_tag, print_head + "ICCID：" + Gsm.getIccId(this));
+        Log.i(print_tag, print_head + "ICCID(SimSerial)：" + Gsm.getIccId(this));
         Log.i(print_tag, print_head + "IMSI：" + Gsm.getIMSI(this));
         Log.i(print_tag, print_head + "IMEI：" + Gsm.getIMEI(this));
         Log.i(print_tag, print_head + "SignalDbm：" + Gsm.getMobileDbm(this));
