@@ -7,15 +7,18 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.telephony.CellIdentityLte;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoCdma;
 import android.telephony.CellInfoGsm;
 import android.telephony.CellInfoLte;
 import android.telephony.CellInfoWcdma;
+import android.telephony.CellLocation;
 import android.telephony.CellSignalStrengthCdma;
 import android.telephony.CellSignalStrengthGsm;
 import android.telephony.CellSignalStrengthLte;
 import android.telephony.CellSignalStrengthWcdma;
+import android.telephony.NeighboringCellInfo;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -33,6 +36,390 @@ import static android.content.Context.TELEPHONY_SERVICE;
 import static androidx.core.content.ContextCompat.getSystemService;
 
 public class Gsm {
+    public static String getSimState(Context context) {
+        TelephonyManager tm;
+        String simState = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            if (tm.getSimState() == tm.SIM_STATE_READY) {
+                simState =  "有SIM卡";
+            } else if (tm.getSimState() == tm.SIM_STATE_ABSENT) {
+                simState = "无SIM卡";
+            } else {
+                simState = "SIM卡被锁定或未知的状态";
+            }
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return simState;
+    }
+
+    public static String getCallState(Context context) {
+        TelephonyManager tm;
+        String callState = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            if (tm.getCallState() == 0) {
+                callState =  "无活动";
+            } else if (tm.getCallState() == 1) {
+                callState = "响铃声";
+            } else {
+                callState = "摘机";
+            }
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return callState;
+    }
+
+    public static String getCellLocation(Context context) {
+        TelephonyManager tm;
+        CellLocation cellLocation = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            cellLocation = tm.getCellLocation();
+            if(null == cellLocation)
+                return "snull";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return cellLocation.toString();
+    }
+
+    public static String getNetworkCountryIso(Context context) {
+        TelephonyManager tm;
+        String networkCountryIso = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            networkCountryIso = tm.getNetworkCountryIso();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return networkCountryIso;
+    }
+
+    public static String getNetworkOperator(Context context) {
+        TelephonyManager tm;
+        String networkOperator = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            networkOperator = tm.getNetworkOperator();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return networkOperator;
+    }
+
+    public static String getNetworkOperatorName(Context context) {
+        TelephonyManager tm;
+        String networkOperatorName = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            networkOperatorName = tm.getNetworkOperatorName();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return networkOperatorName;
+    }
+
+//    /** Network type is unknown */
+//    public static final int NETWORK_TYPE_UNKNOWN = TelephonyProtoEnums.NETWORK_TYPE_UNKNOWN; // = 0.
+//    /** Current network is GPRS */
+//    public static final int NETWORK_TYPE_GPRS = TelephonyProtoEnums.NETWORK_TYPE_GPRS; // = 1.
+//    /** Current network is EDGE */
+//    public static final int NETWORK_TYPE_EDGE = TelephonyProtoEnums.NETWORK_TYPE_EDGE; // = 2.
+//    /** Current network is UMTS */
+//    public static final int NETWORK_TYPE_UMTS = TelephonyProtoEnums.NETWORK_TYPE_UMTS; // = 3.
+//    /** Current network is CDMA: Either IS95A or IS95B*/
+//    public static final int NETWORK_TYPE_CDMA = TelephonyProtoEnums.NETWORK_TYPE_CDMA; // = 4.
+//    /** Current network is EVDO revision 0*/
+//    public static final int NETWORK_TYPE_EVDO_0 = TelephonyProtoEnums.NETWORK_TYPE_EVDO_0; // = 5.
+//    /** Current network is EVDO revision A*/
+//    public static final int NETWORK_TYPE_EVDO_A = TelephonyProtoEnums.NETWORK_TYPE_EVDO_A; // = 6.
+//    /** Current network is 1xRTT*/
+//    public static final int NETWORK_TYPE_1xRTT = TelephonyProtoEnums.NETWORK_TYPE_1XRTT; // = 7.
+//    /** Current network is HSDPA */
+//    public static final int NETWORK_TYPE_HSDPA = TelephonyProtoEnums.NETWORK_TYPE_HSDPA; // = 8.
+//    /** Current network is HSUPA */
+//    public static final int NETWORK_TYPE_HSUPA = TelephonyProtoEnums.NETWORK_TYPE_HSUPA; // = 9.
+//    /** Current network is HSPA */
+//    public static final int NETWORK_TYPE_HSPA = TelephonyProtoEnums.NETWORK_TYPE_HSPA; // = 10.
+//    /** Current network is iDen */
+//    public static final int NETWORK_TYPE_IDEN = TelephonyProtoEnums.NETWORK_TYPE_IDEN; // = 11.
+//    /** Current network is EVDO revision B*/
+//    public static final int NETWORK_TYPE_EVDO_B = TelephonyProtoEnums.NETWORK_TYPE_EVDO_B; // = 12.
+//    /** Current network is LTE */
+//    public static final int NETWORK_TYPE_LTE = TelephonyProtoEnums.NETWORK_TYPE_LTE; // = 13.
+//    /** Current network is eHRPD */
+//    public static final int NETWORK_TYPE_EHRPD = TelephonyProtoEnums.NETWORK_TYPE_EHRPD; // = 14.
+//    /** Current network is HSPA+ */
+//    public static final int NETWORK_TYPE_HSPAP = TelephonyProtoEnums.NETWORK_TYPE_HSPAP; // = 15.
+//    /** Current network is GSM */
+//    public static final int NETWORK_TYPE_GSM = TelephonyProtoEnums.NETWORK_TYPE_GSM; // = 16.
+//    /** Current network is TD_SCDMA */
+//    public static final int NETWORK_TYPE_TD_SCDMA =
+//            TelephonyProtoEnums.NETWORK_TYPE_TD_SCDMA; // = 17.
+//    /** Current network is IWLAN */
+//    public static final int NETWORK_TYPE_IWLAN = TelephonyProtoEnums.NETWORK_TYPE_IWLAN; // = 18.
+//    /** Current network is LTE_CA {@hide} */
+//    public static final int NETWORK_TYPE_LTE_CA = TelephonyProtoEnums.NETWORK_TYPE_LTE_CA; // = 19.
+//
+//    /** Max network type number. Update as new types are added. Don't add negative types. {@hide} */
+//    public static final int MAX_NETWORK_TYPE = NETWORK_TYPE_LTE_CA;
+    public static String getNetworkType(Context context) {
+        TelephonyManager tm;
+        String networkType = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            networkType = "" + tm.getNetworkType();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return networkType;
+    }
+
+    /**
+     * 返回移动终端的类型：<br/>
+     * #PHONE_TYPE_NONE 0
+     * #PHONE_TYPE_GSM  1   移动和联通
+     * #PHONE_TYPE_CDMA 2   电信
+     * #PHONE_TYPE_SIP  3
+     *
+     * @return
+     */
+    public static String getPhoneType(Context context) {
+        TelephonyManager tm;
+        String phoneType = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            phoneType = "" + tm.getPhoneType();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return phoneType;
+    }
+
+    // 获取SIM卡提供的移动国家码和移动网络码.5或6位的十进制数字, MCC+MNC
+    // MCC：Mobile Country Code，移动国家码，共3位，中国为460;
+    // MNC:Mobile NetworkCode，移动网络码，共2位
+    // 在中国，移动的代码为电00和02，联通的代码为01，电信的代码为03
+    // 合起来就是（也是Android手机中APN配置文件中的代码）：
+    // 中国移动：46000 46002
+    // 中国联通：46001
+    // 中国电信：46003
+    public static String getSimOperator(Context context) {
+        TelephonyManager tm;
+        String simOperator = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            simOperator = tm.getSimOperator();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return simOperator;
+    }
+
+    public static String getSimOperatorName(Context context) {
+        TelephonyManager tm;
+        String simOperatorName = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            simOperatorName = tm.getSimOperatorName();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return simOperatorName;
+    }
+
+    public static String getVoiceMailAlphaTag(Context context) {
+        TelephonyManager tm;
+        String voiceMailAlphaTag = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            voiceMailAlphaTag = tm.getVoiceMailAlphaTag();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return voiceMailAlphaTag;
+    }
+
+    public static String getVoiceMailNumber(Context context) {
+        TelephonyManager tm;
+        String voiceMailNumber = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            voiceMailNumber = tm.getVoiceMailNumber();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return voiceMailNumber;
+    }
+
+    public static String hasIccCard(Context context) {
+        TelephonyManager tm;
+        String hasIccCard = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            hasIccCard = "" + tm.hasIccCard();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return hasIccCard;
+    }
+
+    public static String isNetworkRoaming(Context context) {
+        TelephonyManager tm;
+        String isNetworkRoaming = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            isNetworkRoaming = "" + tm.isNetworkRoaming();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return isNetworkRoaming;
+    }
+
+//    /** Data connection activity: No traffic. */
+//    public static final int DATA_ACTIVITY_NONE = 0x00000000;
+//    /** Data connection activity: Currently receiving IP PPP traffic. */
+//    public static final int DATA_ACTIVITY_IN = 0x00000001;
+//    /** Data connection activity: Currently sending IP PPP traffic. */
+//    public static final int DATA_ACTIVITY_OUT = 0x00000002;
+//    /** Data connection activity: Currently both sending and receiving
+//     *  IP PPP traffic. */
+//    public static final int DATA_ACTIVITY_INOUT = DATA_ACTIVITY_IN | DATA_ACTIVITY_OUT;
+//    /**
+//     * Data connection is active, but physical link is down
+//     */
+//    public static final int DATA_ACTIVITY_DORMANT = 0x00000004;
+    public static String getDataActivity(Context context) {
+        TelephonyManager tm;
+        String getDataActivity = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            getDataActivity = "" + tm.getDataActivity();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return getDataActivity;
+    }
+
+//     * @see #DATA_DISCONNECTED    0
+//     * @see #DATA_CONNECTING      1
+//     * @see #DATA_CONNECTED       2
+//     * @see #DATA_SUSPENDED       3
+    public static String getDataState(Context context) {
+        TelephonyManager tm;
+        String getDataState = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            getDataState = "" + tm.getDataState();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return getDataState;
+    }
+
+    public static String getDeviceSoftwareVersion(Context context) {
+        TelephonyManager tm;
+        String devSoftVersion = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            devSoftVersion = (String) tm.getDeviceSoftwareVersion();
+
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return devSoftVersion;
+    }
+
+    public static String getNeighboringCellInfo(Context context) {
+        TelephonyManager tm;
+        List<NeighboringCellInfo> neighboringCellInfo = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            neighboringCellInfo = tm.getNeighboringCellInfo();
+            if(null == neighboringCellInfo)
+                return "snull";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return neighboringCellInfo.toString();
+    }
+
+
     public static String getIccId(Context context) {
         TelephonyManager tm;
         String iccid = null;
@@ -50,6 +437,14 @@ public class Gsm {
         return iccid;
     }
 
+    // 举例，一个典型的IMSI号码为460030912121001
+    // IMEI是International Mobile Equipment Identity （国际移动设备标识）的简称
+    // IMEI由15位数字组成的”电子串号”，它与每台手机一一对应，而且该码是全世界唯一的
+    // 其组成为：
+    // 1. 前6位数(TAC)是”型号核准号码”，一般代表机型
+    // 2. 接着的2位数(FAC)是”最后装配号”，一般代表产地
+    // 3. 之后的6位数(SNR)是”串号”，一般代表生产顺序号
+    // 4. 最后1位数(SP)通常是”0″，为检验码，目前暂备用
     public static String getIMEI(Context context) {
         String imei;
         try {
@@ -82,18 +477,33 @@ public class Gsm {
     }
 
     public static String getLine1Number(Context context) {
-        String imsi;
+        String line1Number;
         try {
             TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                 RequestPhoneStatePermission(context);
             }
             //获取IMSI号
-            imsi = telephonyManager.getSubscriberId();
+            line1Number = telephonyManager.getLine1Number();
         } catch (Exception e) {
             return e.getMessage();
         }
-        return imsi;
+        return line1Number;
+    }
+
+    public static String getSimCountryIso(Context context) {
+        String simCountryIso;
+        try {
+            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            //获取IMSI号
+            simCountryIso = telephonyManager.getSimCountryIso();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        return simCountryIso;
     }
 
     public static void RequestPhoneStatePermission(Context context) {
@@ -136,8 +546,8 @@ public class Gsm {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public static int getMobileDbm(Context context) {
-        int dbm = 0;
+    public static String getMobileDbm(Context context) {
+        String dbm = "";
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             RequestPhoneStatePermission(context);
@@ -152,13 +562,13 @@ public class Gsm {
                     if (cellInfo instanceof CellInfoGsm)
                     {
                         CellSignalStrengthGsm cellSignalStrengthGsm = ((CellInfoGsm)cellInfo).getCellSignalStrength();
-                        dbm = cellSignalStrengthGsm.getDbm();
+                        dbm = "" + cellSignalStrengthGsm.getDbm();
                         Log.e("DEBUG", "cellSignalStrengthGsm" + cellSignalStrengthGsm.toString());
                     }
                     else if (cellInfo instanceof CellInfoCdma)
                     {
                         CellSignalStrengthCdma cellSignalStrengthCdma = ((CellInfoCdma)cellInfo).getCellSignalStrength();
-                        dbm = cellSignalStrengthCdma.getDbm();
+                        dbm = "" + cellSignalStrengthCdma.getDbm();
                         Log.e("DEBUG", "cellSignalStrengthCdma" + cellSignalStrengthCdma.toString() );
                     }
                     else if (cellInfo instanceof CellInfoWcdma)
@@ -166,14 +576,19 @@ public class Gsm {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)
                         {
                             CellSignalStrengthWcdma cellSignalStrengthWcdma = ((CellInfoWcdma)cellInfo).getCellSignalStrength();
-                            dbm = cellSignalStrengthWcdma.getDbm();
+                            dbm = "" + cellSignalStrengthWcdma.getDbm();
                             Log.e("DEBUG", "cellSignalStrengthWcdma" + cellSignalStrengthWcdma.toString() );
                         }
                     }
                     else if (cellInfo instanceof CellInfoLte)
                     {
                         CellSignalStrengthLte cellSignalStrengthLte = ((CellInfoLte)cellInfo).getCellSignalStrength();
-                        dbm = cellSignalStrengthLte.getDbm();
+                        dbm += " Rsrp:";
+                        dbm += cellSignalStrengthLte.getDbm();
+                        dbm += " AsuLevel:";
+                        dbm += cellSignalStrengthLte.getAsuLevel();
+//                        Log.e("DEBUG", "getCellIdentity" + ((CellIdentityLte)((CellInfoLte)cellInfo).getCellIdentity()).toString());
+//                        Log.e("DEBUG", "getCellSignalStrengthLte" + ((CellSignalStrengthLte)((CellInfoLte)cellInfo).getCellSignalStrength()).toString());
                     }
                 }
             }
