@@ -3,6 +3,7 @@ package com.example.settings;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +16,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        return;
+        if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // Permission Granted
+
+        } else if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+            // Permission Denied
+
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -65,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
         Log.i(print_tag, print_head + "获取数据连接状态：" + Gsm.getDataState(this));
         Log.i(print_tag, print_head + "SignalDbm：" + Gsm.getMobileDbm(this));
 
+        Log.i(print_tag, print_head + "WIFINB：" + Wifi.getNBWifi(this));
 
+        new Location().listen(this);
     }
 }
