@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
         Log.i(print_tag, print_head + "SignalDbm：" + Gsm.getMobileDbm(this));
 
         Log.i(print_tag, print_head + "WIFINB：" + Wifi.getNBWifi(this));
+        Log.i(print_tag, print_head + "已配置WIFI网络：" + Wifi.getConfiguredNetworks(this));
+        Log.i(print_tag, print_head + "WIFI链接信息：" + Wifi.getConnectionInfo(this));
 
         new Location().listen(this);
     }

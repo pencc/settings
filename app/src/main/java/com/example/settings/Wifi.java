@@ -3,6 +3,8 @@ package com.example.settings;
 import android.Manifest;
 import android.content.Context;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
@@ -36,14 +38,37 @@ public class Wifi {
         ArrayList<ScanResult> list;
         String result = "";
         wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);  //获得系统wifi服务
-        //wifiManager.setWifiEnabled(true);
-        //wifiManager.startScan();
         list = (ArrayList<ScanResult>)wifiManager.getScanResults();
         sortByLevel(list);
         Iterator it = list.iterator();
         while(it.hasNext()) {
             result = result + "\n" + ((ScanResult)it.next()).toString();
         }
+        return result += "\n";
+    }
+
+    public static String getConfiguredNetworks(Context context) {
+        WifiManager wifiManager;
+        ArrayList<WifiConfiguration> list;
+        String result = "";
+        wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);  //获得系统wifi服务
+        list = (ArrayList<WifiConfiguration>)wifiManager.getConfiguredNetworks();
+        Iterator it = list.iterator();
+        while(it.hasNext()) {
+            result = result + "\n" + ((WifiConfiguration)it.next()).toString();
+        }
+        return result += "\n";
+    }
+
+    public static String getConnectionInfo(Context context) {
+        WifiManager wifiManager;
+        WifiInfo connInfo;
+        String result = "";
+        wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);  //获得系统wifi服务
+        connInfo = wifiManager.getConnectionInfo();
+        if(null == connInfo)
+            return "null";
+        result = connInfo.toString();
         return result += "\n";
     }
 }
