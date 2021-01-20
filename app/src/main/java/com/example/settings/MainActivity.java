@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         //SIM卡状态
         Log.i(print_tag, "======================SIM卡信息============================");
-        Log.i(print_tag, print_head + "SIM卡状态：" + Gsm.getSimState(this));adb 
+        Log.i(print_tag, print_head + "SIM卡状态：" + Gsm.getSimState(this));
         Log.i(print_tag, print_head + "电话状态：" + Gsm.getCallState(this));
         Log.i(print_tag, print_head + "电话方位：" + Gsm.getCellLocation(this));
         Log.i(print_tag, print_head + "设备软件版本：" + Gsm.getDeviceSoftwareVersion(this));
