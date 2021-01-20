@@ -404,6 +404,7 @@ public class Gsm {
     public static String getNeighboringCellInfo(Context context) {
         TelephonyManager tm;
         List<NeighboringCellInfo> neighboringCellInfo = null;
+        String result = "";
         try {
             tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -415,8 +416,14 @@ public class Gsm {
         } catch (Exception e) {
             return e.getMessage();
         }
-
-        return neighboringCellInfo.toString();
+        for(NeighboringCellInfo nci : neighboringCellInfo) {
+            result = result + " lac:" + nci.getLac()
+                            + " cid:" + nci.getCid()
+                            + " Rssi:" + nci.getRssi()
+                            + " Psc:" + nci.getPsc()
+                            + " NetworkType:" + nci.getNetworkType();
+        }
+        return result;
     }
 
 
@@ -567,7 +574,8 @@ public class Gsm {
                     if (cellInfo instanceof CellInfoGsm)
                     {
                         CellSignalStrengthGsm cellSignalStrengthGsm = ((CellInfoGsm)cellInfo).getCellSignalStrength();
-                        dbm = "" + cellSignalStrengthGsm.getDbm();
+                        dbm = dbm + "indetity:" + ((CellInfoGsm)cellInfo).getCellIdentity().toString();
+                        dbm = dbm + " signal:" + cellSignalStrengthGsm.getDbm() + ";\n";
                         Log.e("DEBUG", "cellSignalStrengthGsm" + cellSignalStrengthGsm.toString());
                     }
                     else if (cellInfo instanceof CellInfoCdma)
@@ -587,11 +595,13 @@ public class Gsm {
                     }
                     else if (cellInfo instanceof CellInfoLte)
                     {
+                        dbm = dbm + "indetity:" + ((CellInfoLte)cellInfo).getCellIdentity().toString();
                         CellSignalStrengthLte cellSignalStrengthLte = ((CellInfoLte)cellInfo).getCellSignalStrength();
                         dbm += " Rsrp:";
                         dbm += cellSignalStrengthLte.getDbm();
                         dbm += " AsuLevel:";
                         dbm += cellSignalStrengthLte.getAsuLevel();
+                        dbm += "\n";
 //                        Log.e("DEBUG", "getCellIdentity" + ((CellIdentityLte)((CellInfoLte)cellInfo).getCellIdentity()).toString());
 //                        Log.e("DEBUG", "getCellSignalStrengthLte" + ((CellSignalStrengthLte)((CellInfoLte)cellInfo).getCellSignalStrength()).toString());
                     }
