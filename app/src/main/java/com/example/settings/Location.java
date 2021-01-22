@@ -72,7 +72,7 @@ public class Location {
             if (location != null) {
                 double longitude = location.getLongitude(); // 纬度
                 double latitude = location.getLatitude(); // 经度
-                Log.i(LOG_TAG, "经度：" + latitude + ",纬度:" + longitude);
+                Log.i(LOG_TAG, "经度：" + longitude + ",纬度:" + latitude);
             }
 
             GpsStatus.Listener gpsListener = new GpsStatus.Listener() {
@@ -112,7 +112,7 @@ public class Location {
 
             // 3秒更新一次，或最小位移变化超过1米更新一次；
             // 注意：此处更新准确度非常低，推荐在service里面启动一个Thread，在run中sleep(10000);然后执行handler.sendMessage(),更新位置
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 100, locationListener);
         }
     }
 
