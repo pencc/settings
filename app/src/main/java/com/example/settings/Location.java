@@ -11,6 +11,7 @@ import android.location.GpsStatus;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.location.OnNmeaMessageListener;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,6 +48,7 @@ public class Location {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void listen(Context context) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             RequestPhoneStatePermission(context);
@@ -112,11 +114,22 @@ public class Location {
 
             GpsStatus.NmeaListener nmeaListener = new GpsStatus.NmeaListener() {
                 public void onNmeaReceived(long timestamp, String nmea) {
+                    String nmeaResult = "";
                     //check nmea's checksum
                     String[]rawNmeaSplit = nmea.split(",");
-                    Log.i(LOG_TAG, "nvme quality:" + rawNmeaSplit[6]
-                            + " location:" + rawNmeaSplit[2]+ " "+ rawNmeaSplit[3] +"," + rawNmeaSplit[4] + ""+ rawNmeaSplit[5]
-                            + "satellites:" + rawNmeaSplit[7]);
+//                    Log.i(LOG_TAG, "nvme quality:" + rawNmeaSplit[6]
+//                            + " location:" + rawNmeaSplit[2]+ " "+ rawNmeaSplit[3] +"," + rawNmeaSplit[4] + ""+ rawNmeaSplit[5]
+//                            + "satellites:" + rawNmeaSplit[7]);
+                    for(String nmeaRaw:rawNmeaSplit)
+                        nmeaResult = nmeaResult + "," + nmeaRaw;
+                    Log.i(LOG_TAG, "nmea raw:" + nmeaResult);
+                }
+            };
+
+            OnNmeaMessageListener nmeaListener2 = new OnNmeaMessageListener() {
+                @Override
+                public void onNmeaMessage(String nmea, long l) {
+                    Log.i(LOG_TAG, "nmea2 raw:" + nmea);
                 }
             };
 
@@ -146,6 +159,7 @@ public class Location {
             // 注意：此处更新准确度非常低，推荐在service里面启动一个Thread，在run中sleep(10000);然后执行handler.sendMessage(),更新位置
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
             locationManager.addNmeaListener(nmeaListener);
+            locationManager.addNmeaListener(nmeaListener2);
         }
     }
 
