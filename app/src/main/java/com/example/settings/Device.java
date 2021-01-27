@@ -32,4 +32,25 @@ public class Device {
         }
         return prop_dev_name;
     }
+
+    public static String getPropMode() {
+        String prop_dev_name = "";
+        try {
+            Class systemPropertiesClass = Class.forName("android.os.SystemProperties");
+            Method getMethod = systemPropertiesClass.getMethod("get", String.class);
+            Object object = new Object();
+            Object obj = getMethod.invoke(object, "ro.secure");
+            if(null != obj)
+                prop_dev_name = prop_dev_name + "ro.secure:" + (String)obj;
+            obj = getMethod.invoke(object, "ro.adb.secure");
+            if(null != obj)
+                prop_dev_name = prop_dev_name + " ro.adb.secure:" + (String)obj;
+            obj = getMethod.invoke(object, "ro.debuggable");
+            if(null != obj)
+                prop_dev_name = prop_dev_name + " ro.debuggable:" + (String)obj;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return prop_dev_name;
+    }
 }

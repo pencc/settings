@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         Log.i(print_tag, print_head + "设备名：" + Device.getGlobalDeviceName(getContentResolver()));
         Log.i(print_tag, print_head + "产品名(build)：" + Device.getBuildProduct());
         Log.i(print_tag, print_head + "产品名(prop)：" + Device.getPropProductName());
+        Log.i(print_tag, print_head + "设备模式(prop)：" + Device.getPropMode());
+        Log.i(print_tag, print_head + "设备模式(Build)：" + android.os.Build.TYPE);
 
         Log.i(print_tag, "======================网络信息============================");
         Log.i(print_tag, print_head + "IP(WIFI)：" + Wireless.getWlanIpAddress(this));
@@ -78,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
         Log.i(print_tag, print_head + "已配置WIFI网络：" + Wifi.getConfiguredNetworks(this));
         Log.i(print_tag, print_head + "WIFI链接信息：" + Wifi.getConnectionInfo(this));
 
-        new Location().getGnssLocation(this);
+        //new Location().getGnssLocation(this);
 
-        new Location().listen(this);
+        //new Location().listen(this);
     }
 }
