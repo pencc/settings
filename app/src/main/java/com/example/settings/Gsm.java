@@ -19,6 +19,8 @@ import android.telephony.CellSignalStrengthGsm;
 import android.telephony.CellSignalStrengthLte;
 import android.telephony.CellSignalStrengthWcdma;
 import android.telephony.NeighboringCellInfo;
+import android.telephony.PhoneStateListener;
+import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -36,6 +38,10 @@ import static android.content.Context.TELEPHONY_SERVICE;
 import static androidx.core.content.ContextCompat.getSystemService;
 
 public class Gsm {
+
+    private static final String LOG_TAG = "Gsm";
+    private PhoneStateListener phoneStateListener; //定义监听器
+
     public static String getSimState(Context context) {
         TelephonyManager tm;
         String simState = null;
@@ -401,6 +407,23 @@ public class Gsm {
         return devSoftVersion;
     }
 
+    public static String getNAI(Context context) {
+        TelephonyManager tm;
+        String nai = null;
+        try {
+            tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            nai = (String) tm.getNai();
+
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return nai;
+    }
+
     public static String getNeighboringCellInfo(Context context) {
         TelephonyManager tm;
         List<NeighboringCellInfo> neighboringCellInfo = null;
@@ -611,4 +634,24 @@ public class Gsm {
         return dbm;
     }
 
+    //设置监听器方法
+    public void listen(Context context){
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        phoneStateListener = new PhoneStateListener(){
+            @Override
+            public void onCellLocationChanged(CellLocation location){
+                Log.i(LOG_TAG,  "onCellLocationChanged：" + location.toString());
+            }
+            @Override
+            public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+                Log.i(LOG_TAG,  "onSignalStrengthsChanged：" + signalStrength.toString());
+            }
+            @Override
+            public void onCellInfoChanged(List<CellInfo> cellInfo) {
+                Log.i(LOG_TAG,  "onCellInfoChanged：" + cellInfo.toString());
+            }
+        };
+
+        tm.listen(phoneStateListener, PhoneStateListener.LISTEN_CELL_LOCATION); //注册监听器，设定不同的监听类型
+    }
 }

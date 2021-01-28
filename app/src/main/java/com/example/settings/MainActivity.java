@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(print_tag, print_head + "电话状态：" + Gsm.getCallState(this));
         Log.i(print_tag, print_head + "电话方位：" + Gsm.getCellLocation(this));
         Log.i(print_tag, print_head + "设备软件版本：" + Gsm.getDeviceSoftwareVersion(this));
+        Log.i(print_tag, print_head + "网络访问标识符：" + Gsm.getNAI(this));
         Log.i(print_tag, print_head + "ICCID(SimSerial)：" + Gsm.getIccId(this));
         Log.i(print_tag, print_head + "IMSI：" + Gsm.getIMSI(this));
         Log.i(print_tag, print_head + "IMEI：" + Gsm.getIMEI(this));
@@ -83,5 +84,7 @@ public class MainActivity extends AppCompatActivity {
         //new Location().getGnssLocation(this);
 
         //new Location().listen(this);
+
+        new com.example.settings.Gsm().listen(this);
     }
 }
