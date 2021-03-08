@@ -2,17 +2,20 @@ package com.example.settings;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
     private final static int REQUEST_READ_PHONE_STATE = 10000;
     private final String print_tag = "dev.info";
-    private final String print_head = "--";
+    private final String print_head = "-----";
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -27,11 +30,51 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private void requestPermission(Context context) {
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.i("requestPermission","checkSelfPermission");
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_CONTACTS)) {
+                Log.i("requestPermission","shouldShowRequestPermissionRationale");
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        0);
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        0);
+
+            } else {
+                Log.i("requestPermission","requestPermissions");
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        0);
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        0);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        requestPermission(this);
 
         Log.i(print_tag, "======================设备信息============================");
         Log.i(print_tag, print_head + "设备名：" + Device.getGlobalDeviceName(getContentResolver()));
@@ -82,9 +125,17 @@ public class MainActivity extends AppCompatActivity {
         Log.i(print_tag, print_head + "WIFI链接信息：" + Wifi.getConnectionInfo(this));
 
         //new Location().getGnssLocation(this);
-
         //new Location().listen(this);
+        //new com.example.settings.Gsm().listen(this);
 
-        new com.example.settings.Gsm().listen(this);
+        Log.i(print_tag, "======================软件信息============================");
+        //Log.i(print_tag, print_head + "已安装APK：" + SoftWare.getInstalledApplications(this, "oneplus"));
+        //Log.i(print_tag, print_head + "已安装Pkg：" + SoftWare.getInstalledPackage(this, "oneplus"));
+//        SoftWare.pkgWriteToFile(this, "oneplus");
+//        SoftWare.appWriteToFile(this, "oneplus");
+//        SoftWare.pkgFileToRead(this, "oneplus");
+//        SoftWare.appFileToRead(this, "oneplus");
+        SoftWare.getAppInfo(this, "oneplus");
+        SoftWare.getPkgInfo(this, "oneplus");
     }
 }
