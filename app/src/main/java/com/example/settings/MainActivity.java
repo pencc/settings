@@ -50,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         0);
-
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        0);
             } else {
                 Log.i("requestPermission","requestPermissions");
                 // No explanation needed, we can request the permission.
@@ -59,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
                         0);
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        0);
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                         0);
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                 // app-defined int constant. The callback method gets the
@@ -132,10 +137,12 @@ public class MainActivity extends AppCompatActivity {
         //Log.i(print_tag, print_head + "已安装APK：" + SoftWare.getInstalledApplications(this, "oneplus"));
         //Log.i(print_tag, print_head + "已安装Pkg：" + SoftWare.getInstalledPackage(this, "oneplus"));
 //        SoftWare.pkgWriteToFile(this, "oneplus");
-//        SoftWare.appWriteToFile(this, "oneplus");
+        SoftWare.appWriteToFile(this, "oneplus");
+        SoftWare.appReadFromFile(this, "oneplus");
 //        SoftWare.pkgFileToRead(this, "oneplus");
-//        SoftWare.appFileToRead(this, "oneplus");
-        SoftWare.getAppInfo(this, "oneplus");
-        SoftWare.getPkgInfo(this, "oneplus");
+        //SoftWare.appFileToRead(this, "oneplus");
+
+        //SoftWare.getAppInfo(this, "oneplus");
+//        SoftWare.getPkgInfo(this, "oneplus");
     }
 }

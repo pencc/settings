@@ -3,6 +3,7 @@ package com.example.settings;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -133,6 +134,142 @@ public class SoftWare {
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     public static String appWriteToFile(Context context, String phoneName) {
+        //MATCH_SYSTEM_ONLY
+        List<ApplicationInfo> apps = context.getPackageManager().getInstalledApplications(
+                PackageManager.GET_META_DATA | PackageManager.GET_SHARED_LIBRARY_FILES);
+        JSONObject obj=new JSONObject();
+        try {
+            for(ApplicationInfo ai : apps) {
+                byte[] bytes = marshall(ai);
+                JSONObject subObj=new JSONObject();
+                subObj.put("packageName", ai.packageName);
+                subObj.put("name", ai.name);
+                subObj.put("className", ai.className);
+                subObj.put("appComponentFactory", ai.appComponentFactory);
+                subObj.put("dataDir", ai.dataDir);
+                subObj.put("deviceProtectedDataDir", ai.deviceProtectedDataDir);
+                subObj.put("manageSpaceActivityName", ai.manageSpaceActivityName);
+                subObj.put("nativeLibraryDir", ai.nativeLibraryDir);
+                subObj.put("permission", ai.permission);
+                subObj.put("processName", ai.processName);
+                subObj.put("publicSourceDir", ai.publicSourceDir);
+                subObj.put("sourceDir", ai.sourceDir);
+                subObj.put("taskAffinity", ai.taskAffinity);
+                subObj.put("enabled", ai.enabled); // boolean
+                subObj.put("flags", ai.flags);  // int
+                subObj.put("icon", ai.icon);  // int
+                subObj.put("labelRes", ai.labelRes);  // int
+                subObj.put("metaData", ai.metaData);  // Bundle
+                subObj.put("minSdkVersion", ai.minSdkVersion);  // int
+                subObj.put("nonLocalizedLabel", ai.nonLocalizedLabel);  // CharSequence
+                subObj.put("sharedLibraryFiles", ai.sharedLibraryFiles);  // String[]
+                subObj.put("storageUuid", ai.storageUuid);  // UUID
+                subObj.put("targetSdkVersion", ai.targetSdkVersion);  // int
+                subObj.put("uid", ai.uid);  // int
+                obj.accumulate("pkgInfo", subObj);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //byte[] newbytes = Base64.decode(pkgStr, 0);
+        //PackageInfo newPkgInfo = PackageInfo.CREATOR.createFromParcel(unmarshall(newbytes));
+        //System.out.println("name:" + newPkgInfo.packageName + "; uid:" + newPkgInfo.applicationInfo.uid);
+        try {
+            File file = new File("/storage/emulated/0/app-one.xml");
+
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write("" + obj.toString());
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
+    }
+
+    static class AppInfo {
+        private JSONObject jsobObj;
+        AppInfo(JSONObject jsobObj) {
+            this.jsobObj = jsobObj;
+        }
+
+        private Object getJsonResult(String key){
+            try {
+                return jsobObj.get(key);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    public static String appReadFromFile(Context context, String phoneName) {
+        File file = new File("/storage/emulated/0/app-one.xml");
+        if (!file.exists()) { // if permission xml file is not exist, we should not config permissions
+            return null;
+        }
+
+        String jsonStr = "";
+        String pLine;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            while ((pLine = br.readLine()) != null) {
+                jsonStr += pLine;
+            }
+            br.close();
+        } catch (Exception e) {
+            return null;
+        }
+
+        try{
+            JSONObject jsonObjectOrig = new JSONObject(jsonStr);
+            JSONArray jsonArray = jsonObjectOrig.getJSONArray("pkgInfo");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                AppInfo appInfo = new AppInfo(jsonObject);
+                appInfo.getJsonResult("packageName");
+                String packageName = (String)appInfo.getJsonResult("packageName");
+                appInfo.getJsonResult("name");
+                appInfo.getJsonResult("className");
+                appInfo.getJsonResult("appComponentFactory");
+                appInfo.getJsonResult("dataDir");
+                appInfo.getJsonResult("deviceProtectedDataDir");
+                appInfo.getJsonResult("manageSpaceActivityName");
+                appInfo.getJsonResult("nativeLibraryDir");
+                String permission = (String)appInfo.getJsonResult("permission");
+                String processName = (String)appInfo.getJsonResult("processName");
+                appInfo.getJsonResult("publicSourceDir");
+                appInfo.getJsonResult("sourceDir");
+                appInfo.getJsonResult("taskAffinity");
+                appInfo.getJsonResult("enabled");
+                appInfo.getJsonResult("flags");
+                appInfo.getJsonResult("icon");
+                appInfo.getJsonResult("labelRes");
+                appInfo.getJsonResult("metaData");
+                appInfo.getJsonResult("minSdkVersion");
+                appInfo.getJsonResult("nonLocalizedLabel");
+                appInfo.getJsonResult("sharedLibraryFiles");
+                appInfo.getJsonResult("storageUuid");
+                appInfo.getJsonResult("targetSdkVersion");
+                appInfo.getJsonResult("uid");
+                System.out.println(packageName + "," + permission + "," + processName);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    public static String appWriteToFileParcel(Context context, String phoneName) {
         List<ApplicationInfo> apps = context.getPackageManager().getInstalledApplications(0);
         JSONObject obj=new JSONObject();
         try {
@@ -152,7 +289,7 @@ public class SoftWare {
         //PackageInfo newPkgInfo = PackageInfo.CREATOR.createFromParcel(unmarshall(newbytes));
         //System.out.println("name:" + newPkgInfo.packageName + "; uid:" + newPkgInfo.applicationInfo.uid);
         try {
-            File file = new File("/storage/emulated/0/app.xml");
+            File file = new File("/storage/emulated/0/app-test.xml");
 
             if (!file.exists()) {
                 file.createNewFile();
@@ -171,8 +308,8 @@ public class SoftWare {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
-    public static String appFileToRead(Context context, String phoneName) {
-        File file = new File("/storage/emulated/0/app.xml");
+    public static String appFileToReadParcel(Context context, String phoneName) {
+        File file = new File("/storage/emulated/0/app-test.xml");
         if (!file.exists()) { // if permission xml file is not exist, we should not config permissions
             return null;
         }
@@ -226,7 +363,7 @@ public class SoftWare {
         return parcel;
     }
 
-    public static String pkgFileToRead(Context context, String phoneName) {
+    public static String pkgFileToReadParcel(Context context, String phoneName) {
         File file = new File("/storage/emulated/0/pkg.xml");
         if (!file.exists()) { // if permission xml file is not exist, we should not config permissions
             return null;
@@ -264,7 +401,7 @@ public class SoftWare {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
-    public static String pkgWriteToFile(Context context, String phoneName) {
+    public static String pkgWriteToFileParcel(Context context, String phoneName) {
         List<PackageInfo> apps = context.getPackageManager().getInstalledPackages(0);
         JSONObject obj=new JSONObject();
         try {
