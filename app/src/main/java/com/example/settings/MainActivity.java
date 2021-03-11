@@ -136,13 +136,13 @@ public class MainActivity extends AppCompatActivity {
         Log.i(print_tag, "======================软件信息============================");
         //Log.i(print_tag, print_head + "已安装APK：" + SoftWare.getInstalledApplications(this, "oneplus"));
         //Log.i(print_tag, print_head + "已安装Pkg：" + SoftWare.getInstalledPackage(this, "oneplus"));
-//        SoftWare.pkgWriteToFile(this, "oneplus");
-        SoftWare.appWriteToFile(this, "oneplus");
-        SoftWare.appReadFromFile(this, "oneplus");
-//        SoftWare.pkgFileToRead(this, "oneplus");
-        //SoftWare.appFileToRead(this, "oneplus");
+        //SoftWare.appWriteToFile(this, "oneplus");
+        //SoftWare.appReadFromFile(this, "oneplus");
 
-        //SoftWare.getAppInfo(this, "oneplus");
-//        SoftWare.getPkgInfo(this, "oneplus");
+//        new SoftWare().pkgWriteToFile2(this, "oneplus");
+//        new SoftWare().pkgReadFromFile2(this, "oneplus");
+
+//        SoftWare.getAppInfo(this, "oneplus");
+        new SoftWare().getPkgInfo(this, "oneplus");
     }
 }
