@@ -39,6 +39,7 @@ public class SoftWare {
     @RequiresApi(api = Build.VERSION_CODES.P)
     private String getAPPInfo(ApplicationInfo pkgInfo) {
         String pkgInfoStr = "";
+        pkgInfoStr += ("uid:" + pkgInfo.uid + ",");
         pkgInfoStr += ("name:" + pkgInfo.name + ",");
         pkgInfoStr += ("packageName:" + pkgInfo.packageName + ",");
         pkgInfoStr += ("className:" + pkgInfo.className + ",");
@@ -74,7 +75,6 @@ public class SoftWare {
         pkgInfoStr += ("storageUuid:" + pkgInfo.storageUuid + ",");
         pkgInfoStr += ("targetSdkVersion:" + pkgInfo.targetSdkVersion + ",");
         pkgInfoStr += ("theme:" + pkgInfo.theme + ",");
-        pkgInfoStr += ("uid:" + pkgInfo.uid + ",");
         pkgInfoStr += ("uiOptions:" + pkgInfo.uiOptions + ",");
 
 
@@ -83,8 +83,13 @@ public class SoftWare {
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     private String getPkgInfo(PackageInfo pkgInfo) {
-        String pkgInfoStr = "";
-        pkgInfoStr += ("permissions:" + pkgInfo.permissions + ",");
+        String pkgInfoStr = "appInfo.uid:";
+        if(null != pkgInfo.applicationInfo) {
+            pkgInfoStr += pkgInfo.applicationInfo.uid;
+        } else {
+            pkgInfoStr += "null";
+        }
+        pkgInfoStr += (",permissions:" + pkgInfo.permissions + ",");
         pkgInfoStr += ("packageName:" + pkgInfo.packageName + ",");
         pkgInfoStr += ("sharedUserId:" + pkgInfo.sharedUserId + ",");
         pkgInfoStr += ("versionName:" + pkgInfo.versionName + ",");
@@ -125,6 +130,16 @@ public class SoftWare {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    public void getOnePkgInfo(Context context, String pkgName) {
+        try {
+            PackageInfo pkgInfo = context.getPackageManager().getPackageInfo(pkgName, 0);
+            System.out.println("getOnePkgInfo:" + getPkgInfo(pkgInfo));
+        } catch (Exception e) {
+            System.out.println("" + e.getMessage());
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
@@ -262,7 +277,7 @@ public class SoftWare {
         List<PackageInfo> apps = context.getPackageManager().getInstalledPackages(
                 PackageManager.GET_ACTIVITIES | PackageManager.GET_SERVICES | PackageManager.GET_PERMISSIONS
                 | PackageManager.GET_SHARED_LIBRARY_FILES | PackageManager.GET_RECEIVERS | PackageManager.GET_GIDS
-                | PackageManager.GET_INSTRUMENTATION);
+                | PackageManager.GET_INSTRUMENTATION | PackageManager.GET_META_DATA);
         JSONObject obj=new JSONObject();
         try {
             for(PackageInfo ai : apps) {

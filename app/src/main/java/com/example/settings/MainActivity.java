@@ -142,7 +142,8 @@ public class MainActivity extends AppCompatActivity {
 //        new SoftWare().pkgWriteToFile2(this, "oneplus");
 //        new SoftWare().pkgReadFromFile2(this, "oneplus");
 
-//        SoftWare.getAppInfo(this, "oneplus");
+        //new SoftWare().getAppInfo(this, "oneplus");
         new SoftWare().getPkgInfo(this, "oneplus");
+        new SoftWare().getOnePkgInfo(this, "com.oneplus.filemanager");
     }
 }
