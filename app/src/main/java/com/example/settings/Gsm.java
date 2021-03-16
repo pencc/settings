@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.telephony.CellIdentityLte;
@@ -31,10 +33,13 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
 import static android.content.Context.TELEPHONY_SERVICE;
+import static android.net.ConnectivityManager.TYPE_VPN;
 import static androidx.core.content.ContextCompat.getSystemService;
 
 public class Gsm {
@@ -575,10 +580,64 @@ public class Gsm {
                 } catch (SocketException e) {
                     e.printStackTrace();
                 }
-
             }
         }
         return null;
+    }
+
+    public static String getVpnIpAddress(Context context) {
+        NetworkInfo info = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+        if (info != null && info.isConnected()) {
+            // 3/4g网络
+            if (info.getType() == TYPE_VPN) {
+                try {
+                    for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
+                        NetworkInterface intf = en.nextElement();
+                        for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                            InetAddress inetAddress = enumIpAddr.nextElement();
+                            if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
+                                return inetAddress.getHostAddress();
+                            }
+                        }
+                    }
+                } catch (SocketException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
+    public static String getVpnNetworkInfo(Context context) {
+        NetworkInfo info = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(TYPE_VPN);
+        if (info != null && info.isConnected()) {
+                return info.toString();
+        }
+        return null;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static boolean isVpnInUse(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        Network activeNetwork = connectivityManager.getActiveNetwork();
+        NetworkCapabilities caps = connectivityManager.getNetworkCapabilities(activeNetwork);
+        boolean vpnInUse = caps.hasTransport(NetworkCapabilities.TRANSPORT_VPN);
+        return vpnInUse;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static boolean isVpnInUse2(Context context) {
+        List<String> networkList = new ArrayList<>();
+        try {
+            for (NetworkInterface networkInterface : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                if (networkInterface.isUp())
+                    networkList.add(networkInterface.getName());
+            }
+        } catch (Exception ex) {
+            Log.e("VPN", "isVpnUsing Network List didn't received");
+        }
+
+        return networkList.contains("ppp0");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)

@@ -100,6 +100,10 @@ public class MainActivity extends AppCompatActivity {
         Log.i(print_tag, print_head + "MAC(wlan0)：" + Wireless.getWlanMacAddress("wlan0"));
         Log.i(print_tag, print_head + "MAC(wlan1)：" + Wireless.getWlanMacAddress("wlan1"));
         Log.i(print_tag, print_head + "IP(GPRS):" + Gsm.getLocalIpAddress(this));
+        Log.i(print_tag, print_head + "IP(VPN):" + Gsm.getVpnIpAddress(this));
+        Log.i(print_tag, print_head + "Network(VPN):" + Gsm.getVpnNetworkInfo(this));
+        Log.i(print_tag, print_head + "isVpnInUse:" + Gsm.isVpnInUse(this));
+        Log.i(print_tag, print_head + "isVpnInUse2:" + Gsm.isVpnInUse2(this));
         Log.i(print_tag, print_head + "MAC(phone1)：" + Wireless.getWlanMacAddress("rmnet_data1"));
         Log.i(print_tag, print_head + "MAC(phone2)：" + Wireless.getWlanMacAddress("rmnet_data2"));
 
