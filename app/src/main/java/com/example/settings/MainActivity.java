@@ -53,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                         0);
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.permission.READ_CONTACTS},
+//                        0);
             } else {
                 Log.i("requestPermission","requestPermissions");
                 // No explanation needed, we can request the permission.
@@ -65,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                         0);
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.permission.READ_CONTACTS},
+//                        0);
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                 // app-defined int constant. The callback method gets the
                 // result of the request.
@@ -138,12 +144,19 @@ public class MainActivity extends AppCompatActivity {
         //Log.i(print_tag, print_head + "已安装Pkg：" + SoftWare.getInstalledPackage(this, "oneplus"));
         //SoftWare.appWriteToFile(this, "oneplus");
         //SoftWare.appReadFromFile(this, "oneplus");
-
 //        new SoftWare().pkgWriteToFile2(this, "oneplus");
 //        new SoftWare().pkgReadFromFile2(this, "oneplus");
 
-        //new SoftWare().getAppInfo(this, "oneplus");
-        new SoftWare().getPkgInfo(this, "oneplus");
-        new SoftWare().getOnePkgInfo(this, "com.oneplus.filemanager");
+        final boolean enableSoftInfo = false;
+        if(enableSoftInfo) {
+            new SoftWare().getAppInfo(this, "oneplus");
+            new SoftWare().getPkgInfo(this, "oneplus");
+            new SoftWare().getOnePkgInfo(this, "com.oneplus.filemanager");
+        }
+
+        Log.i(print_tag, "======================数据信息============================");
+        Data.getAllContactInfo(this);
+
+
     }
 }
