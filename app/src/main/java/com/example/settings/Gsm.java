@@ -36,10 +36,15 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Formatter;
 import java.util.List;
+import java.util.Locale;
 
 import static android.content.Context.TELEPHONY_SERVICE;
+import static android.net.ConnectivityManager.TYPE_MOBILE;
+import static android.net.ConnectivityManager.TYPE_MOBILE_DUN;
 import static android.net.ConnectivityManager.TYPE_VPN;
+import static android.net.ConnectivityManager.TYPE_WIFI;
 import static androidx.core.content.ContextCompat.getSystemService;
 
 public class Gsm {
@@ -47,6 +52,7 @@ public class Gsm {
     private static final String LOG_TAG = "Gsm";
     private PhoneStateListener phoneStateListener; //定义监听器
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getSimState(Context context) {
         TelephonyManager tm;
         String simState = null;
@@ -69,6 +75,7 @@ public class Gsm {
         return simState;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getCallState(Context context) {
         TelephonyManager tm;
         String callState = null;
@@ -91,6 +98,7 @@ public class Gsm {
         return callState;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getCellLocation(Context context) {
         TelephonyManager tm;
         CellLocation cellLocation = null;
@@ -109,6 +117,7 @@ public class Gsm {
         return cellLocation.toString();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getNetworkCountryIso(Context context) {
         TelephonyManager tm;
         String networkCountryIso = null;
@@ -125,6 +134,7 @@ public class Gsm {
         return networkCountryIso;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getNetworkOperator(Context context) {
         TelephonyManager tm;
         String networkOperator = null;
@@ -141,6 +151,7 @@ public class Gsm {
         return networkOperator;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getNetworkOperatorName(Context context) {
         TelephonyManager tm;
         String networkOperatorName = null;
@@ -201,6 +212,7 @@ public class Gsm {
 //
 //    /** Max network type number. Update as new types are added. Don't add negative types. {@hide} */
 //    public static final int MAX_NETWORK_TYPE = NETWORK_TYPE_LTE_CA;
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getNetworkType(Context context) {
         TelephonyManager tm;
         String networkType = null;
@@ -226,6 +238,7 @@ public class Gsm {
      *
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getPhoneType(Context context) {
         TelephonyManager tm;
         String phoneType = null;
@@ -250,6 +263,7 @@ public class Gsm {
     // 中国移动：46000 46002
     // 中国联通：46001
     // 中国电信：46003
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getSimOperator(Context context) {
         TelephonyManager tm;
         String simOperator = null;
@@ -266,6 +280,7 @@ public class Gsm {
         return simOperator;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getSimOperatorName(Context context) {
         TelephonyManager tm;
         String simOperatorName = null;
@@ -282,6 +297,7 @@ public class Gsm {
         return simOperatorName;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getVoiceMailAlphaTag(Context context) {
         TelephonyManager tm;
         String voiceMailAlphaTag = null;
@@ -298,6 +314,7 @@ public class Gsm {
         return voiceMailAlphaTag;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getVoiceMailNumber(Context context) {
         TelephonyManager tm;
         String voiceMailNumber = null;
@@ -314,6 +331,7 @@ public class Gsm {
         return voiceMailNumber;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String hasIccCard(Context context) {
         TelephonyManager tm;
         String hasIccCard = null;
@@ -330,6 +348,7 @@ public class Gsm {
         return hasIccCard;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String isNetworkRoaming(Context context) {
         TelephonyManager tm;
         String isNetworkRoaming = null;
@@ -359,6 +378,7 @@ public class Gsm {
 //     * Data connection is active, but physical link is down
 //     */
 //    public static final int DATA_ACTIVITY_DORMANT = 0x00000004;
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getDataActivity(Context context) {
         TelephonyManager tm;
         String getDataActivity = null;
@@ -379,6 +399,7 @@ public class Gsm {
 //     * @see #DATA_CONNECTING      1
 //     * @see #DATA_CONNECTED       2
 //     * @see #DATA_SUSPENDED       3
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getDataState(Context context) {
         TelephonyManager tm;
         String getDataState = null;
@@ -395,6 +416,7 @@ public class Gsm {
         return getDataState;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getDeviceSoftwareVersion(Context context) {
         TelephonyManager tm;
         String devSoftVersion = null;
@@ -412,6 +434,7 @@ public class Gsm {
         return devSoftVersion;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
     public static String getNAI(Context context) {
         TelephonyManager tm;
         String nai = null;
@@ -429,6 +452,7 @@ public class Gsm {
         return nai;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getNeighboringCellInfo(Context context) {
         TelephonyManager tm;
         List<NeighboringCellInfo> neighboringCellInfo = null;
@@ -455,6 +479,7 @@ public class Gsm {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getIccId(Context context) {
         TelephonyManager tm;
         String iccid = null;
@@ -480,6 +505,7 @@ public class Gsm {
     // 2. 接着的2位数(FAC)是”最后装配号”，一般代表产地
     // 3. 之后的6位数(SNR)是”串号”，一般代表生产顺序号
     // 4. 最后1位数(SP)通常是”0″，为检验码，目前暂备用
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getIMEI(Context context) {
         String imei;
         try {
@@ -496,6 +522,7 @@ public class Gsm {
         return imei;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getIMSI(Context context) {
         String imsi;
         try {
@@ -511,6 +538,7 @@ public class Gsm {
         return imsi;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getLine1Number(Context context) {
         String line1Number;
         try {
@@ -526,6 +554,7 @@ public class Gsm {
         return line1Number;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getSimCountryIso(Context context) {
         String simCountryIso;
         try {
@@ -585,6 +614,63 @@ public class Gsm {
         return null;
     }
 
+    private static String getMacStr(byte[] macByte) {
+        Formatter formatter = new Formatter();
+        String sMac = "";
+        for (int i = 0; i < macByte.length; i++) {
+            sMac = formatter.format(Locale.getDefault(), "%02X%s",
+                    macByte[i], (i < macByte.length - 1) ? "-" : "")
+                    .toString();
+        }
+        return sMac;
+    }
+
+    public static String getAllInterface() {
+        String interfaces = "";
+        Enumeration<NetworkInterface> nifs;
+        try {
+            nifs = NetworkInterface.getNetworkInterfaces();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return interfaces;
+        }
+
+        while (nifs.hasMoreElements()) {
+            NetworkInterface nif = nifs.nextElement();
+            try {
+                interfaces = interfaces + nif.getName() + ":" + nif.getDisplayName() + ":" + ((nif.getHardwareAddress()==null)?"null":getMacStr(nif.getHardwareAddress())) + ":" + nif.isUp() + "; ";
+            } catch (Exception e) {
+                e.printStackTrace();
+                continue;
+            }
+        }
+        return interfaces;
+    }
+
+    public static String getAllInterfaceIP() {
+        String interfaces = "";
+        Enumeration<NetworkInterface> nifs;
+        try {
+            nifs = NetworkInterface.getNetworkInterfaces();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return interfaces;
+        }
+
+        while (nifs.hasMoreElements()) {
+            NetworkInterface nif = nifs.nextElement();
+            // 获得与该网络接口绑定的 IP 地址，一般只有一个
+            Enumeration<InetAddress> addresses = nif.getInetAddresses();
+            while (addresses.hasMoreElements()) {
+                InetAddress addr = addresses.nextElement();
+                if (addr instanceof Inet4Address) { // 只关心 IPv4 地址
+                    interfaces = interfaces + nif.getName() + ":" + nif.getDisplayName() + ":" + addr.getHostAddress() + "; ";
+                }
+            }
+        }
+        return interfaces;
+    }
+
     public static String getVpnIpAddress(Context context) {
         NetworkInfo info = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
         if (info != null && info.isConnected()) {
@@ -596,13 +682,19 @@ public class Gsm {
                         for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
                             InetAddress inetAddress = enumIpAddr.nextElement();
                             if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
-                                return inetAddress.getHostAddress();
+                                return "TYPE_VPN:" + inetAddress.getHostAddress();
                             }
                         }
                     }
                 } catch (SocketException e) {
                     e.printStackTrace();
                 }
+            } else if(info.getType() == TYPE_MOBILE) {
+                return "TYPE_MOBILE";
+            } else if(info.getType() == TYPE_MOBILE_DUN) {
+                return "TYPE_MOBILE_DUN";
+            } else if(info.getType() == TYPE_WIFI) {
+                return "TYPE_WIFI";
             }
         }
         return null;
@@ -616,12 +708,30 @@ public class Gsm {
         return null;
     }
 
+    public static int getActiveNetworks(Context context) {
+        int networks = 0;
+        NetworkInfo[] info = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getAllNetworkInfo();
+        if (info != null){
+            for (int i = 0; i < info.length; i++) {
+                if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                    networks++;
+                }
+            }
+        }
+        return networks;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     public static boolean isVpnInUse(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         Network activeNetwork = connectivityManager.getActiveNetwork();
         NetworkCapabilities caps = connectivityManager.getNetworkCapabilities(activeNetwork);
-        boolean vpnInUse = caps.hasTransport(NetworkCapabilities.TRANSPORT_VPN);
+        boolean vpnInUse = false;
+        try {
+            vpnInUse = caps.hasTransport(NetworkCapabilities.TRANSPORT_VPN);
+        } catch (Exception e){
+
+        }
         return vpnInUse;
     }
 
@@ -640,7 +750,7 @@ public class Gsm {
         return networkList.contains("ppp0");
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static String getMobileDbm(Context context) {
         String dbm = "";
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
