@@ -10,6 +10,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -49,10 +50,10 @@ public class Wifi {
 
     public static String getConfiguredNetworks(Context context) {
         WifiManager wifiManager;
-        ArrayList<WifiConfiguration> list;
+        List<WifiConfiguration> list;
         String result = "";
         wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);  //获得系统wifi服务
-        list = (ArrayList<WifiConfiguration>)wifiManager.getConfiguredNetworks();
+        list = (List<WifiConfiguration>)wifiManager.getConfiguredNetworks();
         Iterator it = list.iterator();
         while(it.hasNext()) {
             result = result + "\n" + ((WifiConfiguration)it.next()).toString();
