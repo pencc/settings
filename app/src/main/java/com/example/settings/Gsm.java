@@ -809,6 +809,14 @@ public class Gsm {
                         CellSignalStrengthLte cellSignalStrengthLte = ((CellInfoLte)cellInfo).getCellSignalStrength();
                         dbm += " Rsrp:";
                         dbm += cellSignalStrengthLte.getDbm();
+                        dbm += " Rsrq:";
+                        dbm += cellSignalStrengthLte.getRsrq();
+                        dbm += " Rssnr:";
+                        dbm += cellSignalStrengthLte.getRssnr();
+                        dbm += " Cqi:";
+                        dbm += cellSignalStrengthLte.getCqi();
+                        dbm += " timingAdvance:";
+                        dbm += cellSignalStrengthLte.getTimingAdvance();
                         dbm += " AsuLevel:";
                         dbm += cellSignalStrengthLte.getAsuLevel();
                         dbm += "\n";

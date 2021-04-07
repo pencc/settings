@@ -35,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.READ_CONTACTS)
                 != PackageManager.PERMISSION_GRANTED) {
-            Log.i("requestPermission","checkSelfPermission");
+            Log.i("requestPermission", "checkSelfPermission");
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.READ_CONTACTS)) {
-                Log.i("requestPermission","shouldShowRequestPermissionRationale");
+                Log.i("requestPermission", "shouldShowRequestPermissionRationale");
                 // Show an expanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 //                        new String[]{Manifest.permission.READ_CONTACTS},
 //                        0);
             } else {
-                Log.i("requestPermission","requestPermissions");
+                Log.i("requestPermission", "requestPermissions");
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -94,6 +94,20 @@ public class MainActivity extends AppCompatActivity {
         Log.i(print_tag, print_head + "设备模式(prop)：" + Device.getPropMode());
         Log.i(print_tag, print_head + "backu模式：" + Device.getPropBackup());
         Log.i(print_tag, print_head + "设备模式(Build)：" + android.os.Build.TYPE);
+        Log.i(print_tag, print_head + "Build(SERIAL)：" + android.os.Build.SERIAL);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Log.i(print_tag, print_head + "BuildGet(SERIAL)：" + Build.getSerial());
+        Log.i(print_tag, print_head + "Prop(SERIAL)：" + Device.getSerialNo());
+        Log.i(print_tag, print_head + "BootProp(SERIAL)：" + Device.getBootSerialNo());
 
         Log.i(print_tag, "======================网络信息============================");
         Log.i(print_tag, print_head + "IP(WIFI)：" + Wireless.getWlanIpAddress(this));
@@ -151,8 +165,9 @@ public class MainActivity extends AppCompatActivity {
         Log.i(print_tag, print_head + "WIFI链接信息：" + Wifi.getConnectionInfo(this));
 
         //new Location().getGnssLocation(this);
+        //new Location().getLast(this);
         new Location().listen(this);
-        //new com.example.settings.Gsm().listen(this);
+        new com.example.settings.Gsm().listen(this);
 
         Log.i(print_tag, "======================软件信息============================");
         //Log.i(print_tag, print_head + "已安装APK：" + SoftWare.getInstalledApplications(this, "oneplus"));
