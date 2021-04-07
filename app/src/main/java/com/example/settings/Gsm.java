@@ -506,7 +506,7 @@ public class Gsm {
     // 3. 之后的6位数(SNR)是”串号”，一般代表生产顺序号
     // 4. 最后1位数(SP)通常是”0″，为检验码，目前暂备用
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public static String getIMEI(Context context) {
+    public static String getIMEI(Context context, int slotId) {
         String imei;
         try {
             //实例化TelephonyManager对象
@@ -515,7 +515,24 @@ public class Gsm {
                 RequestPhoneStatePermission(context);
             }
             //获取IMEI号
-            imei = telephonyManager.getDeviceId();
+            imei = telephonyManager.getDeviceId(slotId);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        return imei;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    public static String getMEID(Context context, int slodId) {
+        String imei;
+        try {
+            //实例化TelephonyManager对象
+            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                RequestPhoneStatePermission(context);
+            }
+            //获取MEID号
+            imei = telephonyManager.getMeid(slodId);
         } catch (Exception e) {
             return e.getMessage();
         }

@@ -53,4 +53,19 @@ public class Device {
         }
         return prop_dev_name;
     }
+
+    public static String getPropBackup() {
+        String prop_dev_name = "";
+        try {
+            Class systemPropertiesClass = Class.forName("android.os.SystemProperties");
+            Method getMethod = systemPropertiesClass.getMethod("get", String.class);
+            Object object = new Object();
+            Object obj = getMethod.invoke(object, "tel.backup");
+            if(null != obj)
+                prop_dev_name = prop_dev_name + "tel.backup:" + (String)obj;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return prop_dev_name;
+    }
 }

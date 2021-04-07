@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(print_tag, print_head + "产品名(build)：" + Device.getBuildProduct());
         Log.i(print_tag, print_head + "产品名(prop)：" + Device.getPropProductName());
         Log.i(print_tag, print_head + "设备模式(prop)：" + Device.getPropMode());
+        Log.i(print_tag, print_head + "backu模式：" + Device.getPropBackup());
         Log.i(print_tag, print_head + "设备模式(Build)：" + android.os.Build.TYPE);
 
         Log.i(print_tag, "======================网络信息============================");
@@ -122,7 +123,10 @@ public class MainActivity extends AppCompatActivity {
         Log.i(print_tag, print_head + "网络访问标识符：" + Gsm.getNAI(this));
         Log.i(print_tag, print_head + "ICCID(SimSerial)：" + Gsm.getIccId(this));
         Log.i(print_tag, print_head + "IMSI：" + Gsm.getIMSI(this));
-        Log.i(print_tag, print_head + "IMEI：" + Gsm.getIMEI(this));
+        Log.i(print_tag, print_head + "IMEI1：" + Gsm.getIMEI(this, 0));
+        Log.i(print_tag, print_head + "IMEI2：" + Gsm.getIMEI(this, 1));
+        Log.i(print_tag, print_head + "MEID1：" + Gsm.getMEID(this, 0));
+        Log.i(print_tag, print_head + "MEID2：" + Gsm.getMEID(this, 1));
         Log.i(print_tag, print_head + "Number：" + Gsm.getLine1Number(this));
         Log.i(print_tag, print_head + "附近的电话的信息：" + Gsm.getNeighboringCellInfo(this));
         Log.i(print_tag, print_head + "ISO标准国家码：" + Gsm.getNetworkCountryIso(this));
@@ -142,11 +146,12 @@ public class MainActivity extends AppCompatActivity {
         Log.i(print_tag, print_head + "SignalDbm：" + Gsm.getMobileDbm(this));
 
         Log.i(print_tag, print_head + "WIFINB：" + Wifi.getNBWifi(this));
+        Log.i(print_tag, print_head + "WIFI Scan：" + Wifi.getNBWifi(this));
         Log.i(print_tag, print_head + "已配置WIFI网络：" + Wifi.getConfiguredNetworks(this));
         Log.i(print_tag, print_head + "WIFI链接信息：" + Wifi.getConnectionInfo(this));
 
         //new Location().getGnssLocation(this);
-        //new Location().listen(this);
+        new Location().listen(this);
         //new com.example.settings.Gsm().listen(this);
 
         Log.i(print_tag, "======================软件信息============================");
@@ -157,11 +162,11 @@ public class MainActivity extends AppCompatActivity {
 //        new SoftWare().pkgWriteToFile2(this, "oneplus");
 //        new SoftWare().pkgReadFromFile2(this, "oneplus");
 
-        final boolean enableSoftInfo = false;
+        final boolean enableSoftInfo = true;
         if(enableSoftInfo) {
-            new SoftWare().getAppInfo(this, "oneplus");
-            new SoftWare().getPkgInfo(this, "oneplus");
-            new SoftWare().getOnePkgInfo(this, "com.oneplus.filemanager");
+            new SoftWare().getAppInfo(this, "com.tencent.mm");
+            new SoftWare().getPkgInfo(this, "com.tencent.mm");
+            //new SoftWare().getOnePkgInfo(this, "com.oneplus.filemanager");
         }
 
         Log.i(print_tag, "======================数据信息============================");

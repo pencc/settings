@@ -47,6 +47,20 @@ public class Wifi {
         return result += "\n";
     }
 
+    public static String scanNBWifi(Context context) {
+        WifiManager wifiManager;
+        ArrayList<ScanResult> list;
+        String result = "";
+        wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);  //获得系统wifi服务
+        list = (ArrayList<ScanResult>)wifiManager.getScanResults();
+        sortByLevel(list);
+        Iterator it = list.iterator();
+        while(it.hasNext()) {
+            result = result + "\n" + ((ScanResult)it.next()).toString();
+        }
+        return result += "\n";
+    }
+
     public static String getConfiguredNetworks(Context context) {
         WifiManager wifiManager;
         ArrayList<WifiConfiguration> list;

@@ -59,7 +59,7 @@ public class SoftWare {
         pkgInfoStr += ("compatibleWidthLimitDp:" + pkgInfo.compatibleWidthLimitDp + ",");
         pkgInfoStr += ("descriptionRes:" + pkgInfo.descriptionRes + ",");
         pkgInfoStr += ("enabled:" + pkgInfo.enabled + ",");
-        pkgInfoStr += ("flags:" + pkgInfo.flags + ",");
+        pkgInfoStr += ("flags:" + pkgInfo.flags + " -----allowBackup:" + (pkgInfo.flags & ApplicationInfo.FLAG_ALLOW_BACKUP) + ",");
         pkgInfoStr += ("icon:" + pkgInfo.icon + ",");
         pkgInfoStr += ("labelRes:" + pkgInfo.labelRes + ",");
         pkgInfoStr += ("largestWidthLimitDp:" + pkgInfo.largestWidthLimitDp + ",");
