@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 //        new SoftWare().pkgWriteToFile2(this, "oneplus");
 //        new SoftWare().pkgReadFromFile2(this, "oneplus");
 
-        final boolean enableSoftInfo = true;
+        final boolean enableSoftInfo = false;
         if(enableSoftInfo) {
             new SoftWare().getAppInfo(this, "com.tencent.mm");
             new SoftWare().getPkgInfo(this, "com.tencent.mm");
