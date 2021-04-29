@@ -86,9 +86,20 @@ public class Location {
             android.location.Location location = locationManager.getLastKnownLocation(bestProvider.getName());
 
             if (location != null) {
-                double longitude = location.getLongitude(); // 纬度
-                double latitude = location.getLatitude(); // 经度
-                Log.i(LOG_TAG, "经度：" + longitude + ",纬度:" + latitude);
+                String strResult = "-----LastKnownLocation: "
+                        + "精准度:" + location.getAccuracy() + ","
+                        + "海拔:" + location.getAltitude() + ","
+                        + "方向(0.0, 360.0]:" + location.getBearing() + ","
+                        + "getElapsedRealtimeNanos:" + String.valueOf(location.getElapsedRealtimeNanos()) + ","
+                        + "经度:" + location.getLongitude() + ","
+                        + "纬度:" + location.getLatitude() + ","
+                        + "提供源:" + location.getProvider()+ ","
+                        + "速度:" + location.getSpeed() + ","
+                        + "时间:" + location.getTime() + ",";
+                Log.i(LOG_TAG, strResult);
+            } else {
+                String strResult = "-----LastKnownLocation: null";
+                Log.i(LOG_TAG, strResult);
             }
 
             GpsStatus.Listener gpsListener = new GpsStatus.Listener() {
