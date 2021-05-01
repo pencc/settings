@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(print_tag, print_head + "产品名(build)：" + Device.getBuildProduct());
         Log.i(print_tag, print_head + "产品名(prop)：" + Device.getPropProductName());
         Log.i(print_tag, print_head + "设备模式(prop)：" + Device.getPropMode());
-        Log.i(print_tag, print_head + "backu模式：" + Device.getPropBackup());
+        Log.i(print_tag, print_head + "lineageos模式：" + Device.getPropBackup());
         Log.i(print_tag, print_head + "设备模式(Build)：" + android.os.Build.TYPE);
         Log.i(print_tag, print_head + "Build(SERIAL)：" + android.os.Build.SERIAL);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {

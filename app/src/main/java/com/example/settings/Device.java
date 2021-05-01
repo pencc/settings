@@ -90,9 +90,9 @@ public class Device {
             Class systemPropertiesClass = Class.forName("android.os.SystemProperties");
             Method getMethod = systemPropertiesClass.getMethod("get", String.class);
             Object object = new Object();
-            Object obj = getMethod.invoke(object, "tel.backup");
+            Object obj = getMethod.invoke(object, "ro.lineage.display.version");
             if(null != obj)
-                prop_dev_name = prop_dev_name + "tel.backup:" + (String)obj;
+                prop_dev_name = prop_dev_name + "ro.lineage.display.version:" + (String)obj;
         } catch (Exception e) {
             e.printStackTrace();
         }
